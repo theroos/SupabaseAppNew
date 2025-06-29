@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/popup_bg"
+    android:gravity="center"
+    android:padding="30dp">
+
+    <EditText
+        android:id="@+id/city_ent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="City Name"
+        android:textSize="18dp"
+        android:inputType="text"
+        android:layout_margin="5dp"/>
+
+    <EditText
+        android:id="@+id/state_ent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="State Name"
+        android:textSize="18dp"
+        android:inputType="text"
+        android:layout_margin="5dp"/>
+
+    <EditText
+        android:id="@+id/no_ent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number"
+        android:textSize="18dp"
+        android:inputType="number"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:id="@+id/button_addpopup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popup_bg"
+        android:text="Add"
+        android:textSize="18dp"
+        android:layout_margin="5dp"/>
+</LinearLayout>
