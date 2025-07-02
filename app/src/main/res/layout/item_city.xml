@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@drawable/bg_item_unselected"
     android:padding="18dp">
 
     <TextView
@@ -41,14 +43,48 @@
             android:textSize="15dp"
             android:text="0"
             android:textColor="#E63329"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
+
+        <LinearLayout
+            android:id="@+id/action_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:layout_margin="8dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/editbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:src="@drawable/editing"
+                android:contentDescription="Edit"
+                android:tint="@android:color/white"
+                android:layout_gravity="end"
+                android:scaleType="centerInside"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/deletebtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:src="@drawable/delete"
+                android:contentDescription="Edit"
+                android:tint="@android:color/white"
+                android:layout_gravity="end"
+                android:scaleType="centerInside"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
-
-
-
 </LinearLayout>
+
