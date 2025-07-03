@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -124,10 +125,10 @@ class MainActivity : AppCompatActivity() {
 
                 val result = response.decodeList<City>()
 
-                Toast.makeText(this@MainActivity, "Fetched ${result.size} items", Toast.LENGTH_LONG).show()
+                //Toast.makeText(this@MainActivity, "Fetched ${result.size} items", Toast.LENGTH_LONG).show()
 
                 // Step 2: Set adapter with real data
-                recylerview.adapter = CityAdapter(result)
+                recylerview.adapter = CityAdapter(result, ::showdeleteconfirmation)
 
             } catch (e: Exception) {
                 Log.e("SupabaseError", "Error: ${e.localizedMessage}", e)
@@ -207,6 +208,30 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception){
                 Log.e("SupabaseError", "Error: ${e.localizedMessage}", e)
                 Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun showdeleteconfirmation(city: City){
+        val dialog = AlertDialog.Builder(this).setTitle("Delete ${city.city}?")
+            .setMessage("Are you sure you want to delete ${city.city}?").setPositiveButton("Delete"){_,_ ->
+                deleteData(city)
+            }.setNegativeButton("Cancel",null).create()
+        dialog.show()
+    }
+
+    private fun deleteData(city: City){
+        lifecycleScope.launch {
+            try{
+                //Toast.makeText(this@MainActivity,"Trying to delete ${city.city} with the number ${city.number}",Toast.LENGTH_SHORT).show()
+
+                val response = supabase.from("cities").delete{filter { eq("no",city.number) }}
+                //Log.d("DeleteDebug", "Delete response: $response")
+                Toast.makeText(this@MainActivity,"Deleted ${city.city}",Toast.LENGTH_LONG).show()
+                fetchcities()
+            }catch (e: Exception){
+                //Log.e("DeleteError", "Unable to delete ${city.city}", e)
+                Toast.makeText(this@MainActivity,"Error: ${e.message}",Toast.LENGTH_LONG).show()
             }
         }
     }
