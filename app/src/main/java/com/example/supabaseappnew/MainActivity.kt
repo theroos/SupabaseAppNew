@@ -1,10 +1,12 @@
 package com.example.supabaseappnew
 
+import android.app.ActionBar.LayoutParams
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
@@ -195,6 +197,37 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this,"Please fill all required fields",Toast.LENGTH_LONG).show()
             }
         }
+
+    }
+
+    private fun showeditdatapopup(city: City){
+        val popupview = layoutInflater.inflate(R.layout.edit_popup,null)
+        val popupwindow = PopupWindow(popupview,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,true)
+
+        val EditCity = popupview.findViewById<EditText>(R.id.edit_city)
+        val EditState = popupview.findViewById<EditText>(R.id.edit_state)
+        val EditNumber = popupview.findViewById<EditText>(R.id.edit_no)
+        val SaveBtn = popupview.findViewById<Button>(R.id.editsave_btn)
+
+        EditCity.setText(city.city)
+        EditState.setText(city.state)
+        EditNumber.setText(city.number.toString())
+
+        SaveBtn.setOnClickListener{
+            val updatedcity = City(city = EditCity.text.toString(),
+                                   state = EditState.text.toString(),
+                                   number = EditNumber.text.toString().toIntOrNull() ?: 0)
+
+
+            popupwindow.dismiss()
+        }
+
+        popupwindow.elevation = 10f
+        popupwindow.showAtLocation(popupview,Gravity.CENTER,0,0)
+
+
+
+
 
     }
 
