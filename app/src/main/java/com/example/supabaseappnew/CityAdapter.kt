@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class CityAdapter(private val cities:List<City>, private val showDeleteConfirmation: (City) -> Unit):RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
+class CityAdapter(private val cities:List<City>,
+                  private val showDeleteConfirmation: (City) -> Unit,
+                  private val showEditConfirmation: (City) -> Unit):RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 
     private var selectedPosition = -1
 
@@ -61,6 +63,7 @@ class CityAdapter(private val cities:List<City>, private val showDeleteConfirmat
 
         editBtn.setOnClickListener {
              // you'll pass this as a lambda from activity
+            showEditConfirmation(city)
         }
 
         deleteBtn.setOnClickListener {

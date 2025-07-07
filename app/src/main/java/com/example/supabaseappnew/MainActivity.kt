@@ -1,7 +1,5 @@
 package com.example.supabaseappnew
 
-import android.app.ActionBar.LayoutParams
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -11,7 +9,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
@@ -19,9 +16,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,10 +25,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -130,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                 //Toast.makeText(this@MainActivity, "Fetched ${result.size} items", Toast.LENGTH_LONG).show()
 
                 // Step 2: Set adapter with real data
-                recylerview.adapter = CityAdapter(result, ::showdeleteconfirmation)
+                recylerview.adapter = CityAdapter(result, ::showdeleteconfirmation, ::showeditdatapopup)
 
             } catch (e: Exception) {
                 Log.e("SupabaseError", "Error: ${e.localizedMessage}", e)
@@ -175,7 +166,7 @@ class MainActivity : AppCompatActivity() {
         val inflater = layoutInflater
         val popupView = inflater.inflate(R.layout.add_data_popup,null)
 
-        val popupWindow = PopupWindow(popupView,LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT,true)
+        val popupWindow = PopupWindow(popupView,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,true)
 
         popupWindow.showAtLocation(popupView, Gravity.CENTER,0,0)
 
@@ -202,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showeditdatapopup(city: City){
         val popupview = layoutInflater.inflate(R.layout.edit_popup,null)
-        val popupwindow = PopupWindow(popupview,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,true)
+        val popupwindow = PopupWindow(popupview,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,true)
 
         val EditCity = popupview.findViewById<EditText>(R.id.edit_city)
         val EditState = popupview.findViewById<EditText>(R.id.edit_state)
@@ -218,7 +209,7 @@ class MainActivity : AppCompatActivity() {
                                    state = EditState.text.toString(),
                                    number = EditNumber.text.toString().toIntOrNull() ?: 0)
 
-
+            updateData(city,updatedcity)
             popupwindow.dismiss()
         }
 
@@ -229,6 +220,19 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    }
+
+    private fun updateData(oldcity: City, updatedcity: City) {
+        lifecycleScope.launch{
+            try{
+                supabase.from("cities").update(updatedcity){filter { eq("name",oldcity.city) }}
+
+                Toast.makeText(this@MainActivity,"Updated ${updatedcity.city}",Toast.LENGTH_LONG).show()
+                fetchcities()
+            }catch (e: Exception){
+                Toast.makeText(this@MainActivity,"Error: ${e.message}",Toast.LENGTH_LONG).show()
+        }
+        }
     }
 
     private fun insertData(city: String, state: String, number: Int){
