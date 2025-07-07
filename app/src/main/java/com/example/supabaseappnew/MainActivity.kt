@@ -224,6 +224,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateData(oldcity: City, updatedcity: City) {
         lifecycleScope.launch{
+
+            val isChanged = oldcity.number != updatedcity.number
+            if (isChanged && !isNumberUnique(updatedcity.number)){
+                Toast.makeText(this@MainActivity,"This number already exists",Toast.LENGTH_SHORT).show()
+                return@launch
+            }
             try{
                 supabase.from("cities").update(updatedcity){filter { eq("name",oldcity.city) }}
 
@@ -239,6 +245,11 @@ class MainActivity : AppCompatActivity() {
         val city = City(city = city, state = state, number = number)
 
         lifecycleScope.launch {
+            val isUnique = isNumberUnique(city.number)
+            if(!isUnique){
+                Toast.makeText(this@MainActivity,"This number already exists",Toast.LENGTH_SHORT).show()
+                return@launch
+            }
             try{
                 supabase.from("cities").insert(city)
                 fetchcities()
@@ -270,6 +281,16 @@ class MainActivity : AppCompatActivity() {
                 //Log.e("DeleteError", "Unable to delete ${city.city}", e)
                 Toast.makeText(this@MainActivity,"Error: ${e.message}",Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private suspend fun isNumberUnique(number: Int): Boolean {
+        return try{
+            val result = supabase.from("cities").select { filter{eq("no",number)} }.decodeList<City>()
+            result.isEmpty()
+        } catch (e: Exception){
+            Log.e("SupabaseError", "Error: ${e.localizedMessage}", e)
+            false
         }
     }
 
