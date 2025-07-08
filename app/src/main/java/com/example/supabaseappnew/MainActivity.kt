@@ -166,7 +166,11 @@ class MainActivity : AppCompatActivity() {
         val inflater = layoutInflater
         val popupView = inflater.inflate(R.layout.add_data_popup,null)
 
-        val popupWindow = PopupWindow(popupView,LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT,true)
+        val widthinDP = 300
+        val scale = resources.displayMetrics.density
+        val widthDp = (widthinDP * scale + 0.5f).toInt()
+
+        val popupWindow = PopupWindow(popupView,widthDp,LinearLayout.LayoutParams.WRAP_CONTENT,true)
 
         popupWindow.showAtLocation(popupView, Gravity.CENTER,0,0)
 
@@ -192,8 +196,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showeditdatapopup(city: City){
+
+        val widthinDP = 300
+        val scale = resources.displayMetrics.density
+        val widthDp = (widthinDP * scale + 0.5f).toInt()
+
         val popupview = layoutInflater.inflate(R.layout.edit_popup,null)
-        val popupwindow = PopupWindow(popupview,ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT,true)
+        val popupwindow = PopupWindow(popupview,widthDp,ViewGroup.LayoutParams.WRAP_CONTENT,true)
 
         val EditCity = popupview.findViewById<EditText>(R.id.edit_city)
         val EditState = popupview.findViewById<EditText>(R.id.edit_state)
