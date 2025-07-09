@@ -152,10 +152,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun setAnimation(clicked: Boolean){
         if(!clicked){
+            add_btn.startAnimation(rotateOpen)
             refresh_btn.startAnimation(fromBottom)
             edit_btn.startAnimation(fromBottom)
             delete_btn.startAnimation(fromBottom)
         }else{
+            add_btn.startAnimation(rotateClose)
             refresh_btn.startAnimation(toBottom)
             edit_btn.startAnimation(toBottom)
             delete_btn.startAnimation(toBottom)
