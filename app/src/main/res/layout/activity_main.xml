@@ -63,11 +63,11 @@
         app:layout_constraintVertical_bias="0.725" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/delete_btn"
+        android:id="@+id/storageactivity_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/secondary"
-        android:src="@drawable/delete"
+        android:src="@drawable/storage"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/recylerview"
         app:layout_constraintEnd_toEndOf="parent"
@@ -76,5 +76,31 @@
         app:layout_constraintTop_toTopOf="@+id/recylerview"
         app:layout_constraintVertical_bias="0.625" />
 
+    <View
+        android:id="@+id/fab_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        android:clickable="true"/>
+
+    <FrameLayout
+        android:id="@+id/progbar_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/fetchdata_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/Widget.AppCompat.ProgressBar"/>
+
+    </FrameLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -1,5 +1,6 @@
 package com.example.supabaseappnew
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -37,10 +38,12 @@ class MainActivity : AppCompatActivity() {
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(this,R.anim.rotate_close_animation) }
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(this,R.anim.from_bottom_animation) }
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this,R.anim.to_bottom_animation) }
+    private val fabback: View by lazy{ findViewById(R.id.fab_background)}
+    private val progressoverlay: View by lazy {findViewById(R.id.progbar_overlay)}
     private val add_btn: FloatingActionButton by lazy {findViewById(R.id.add_btn) }
     private val refresh_btn: FloatingActionButton by lazy {findViewById(R.id.refresh_btn) }
     private val edit_btn: FloatingActionButton by lazy {findViewById(R.id.edit_btn) }
-    private val delete_btn: FloatingActionButton by lazy {findViewById(R.id.delete_btn) }
+    private val storage_btn: FloatingActionButton by lazy {findViewById(R.id.storageactivity_btn) }
     private var clicked = false
 
 
@@ -63,8 +66,13 @@ class MainActivity : AppCompatActivity() {
             //Toast.makeText(this,"Edit button clicked",Toast.LENGTH_LONG).show()
             editdata()
         }
-        delete_btn.setOnClickListener {
-            Toast.makeText(this,"Delete button clicked",Toast.LENGTH_LONG).show()
+        storage_btn.setOnClickListener {
+            val i = Intent(this,StorageActivity::class.java)
+            startActivity(i)
+        }
+
+        fabback.setOnClickListener{
+            addclicked()
         }
 
         supabase = createSupabaseClient(
@@ -77,8 +85,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         fetchcities()
-        
-
 
     }
 
@@ -99,6 +105,9 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun fetchcities() {
+
+        progressoverlay.visibility = View.VISIBLE
+
         lifecycleScope.launch{
             /*try {
                 val result = supabase.postgrest["cities"].select().decodeList<City>()
@@ -126,6 +135,8 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Log.e("SupabaseError", "Error: ${e.localizedMessage}", e)
                 Toast.makeText(this@MainActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }finally {
+                progressoverlay.visibility = View.GONE
             }
         }
     }
@@ -142,11 +153,13 @@ class MainActivity : AppCompatActivity() {
         if(!clicked){
             refresh_btn.visibility = View.VISIBLE
             edit_btn.visibility = View.VISIBLE
-            delete_btn.visibility = View.VISIBLE
+            storage_btn.visibility = View.VISIBLE
+            fabback.visibility = View.VISIBLE
         } else{
             refresh_btn.visibility = View.INVISIBLE
             edit_btn.visibility = View.INVISIBLE
-            delete_btn.visibility = View.INVISIBLE
+            storage_btn.visibility = View.INVISIBLE
+            fabback.visibility = View.GONE
         }
     }
 
@@ -155,12 +168,12 @@ class MainActivity : AppCompatActivity() {
             add_btn.startAnimation(rotateOpen)
             refresh_btn.startAnimation(fromBottom)
             edit_btn.startAnimation(fromBottom)
-            delete_btn.startAnimation(fromBottom)
+            storage_btn.startAnimation(fromBottom)
         }else{
             add_btn.startAnimation(rotateClose)
             refresh_btn.startAnimation(toBottom)
             edit_btn.startAnimation(toBottom)
-            delete_btn.startAnimation(toBottom)
+            storage_btn.startAnimation(toBottom)
         }
     }
 
