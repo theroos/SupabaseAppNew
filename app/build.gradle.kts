@@ -47,8 +47,10 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.github.jan-tennert.supabase:auth-kt")
     implementation("io.github.jan-tennert.supabase:realtime-kt")
+    implementation("io.github.jan-tennert.supabase:storage-kt")
     implementation("io.ktor:ktor-client-android:3.1.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
