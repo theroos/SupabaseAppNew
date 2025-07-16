@@ -2,6 +2,7 @@ package com.example.supabaseappnew
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -38,7 +39,7 @@ class StorageActivity : AppCompatActivity() {
             supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhdWttanlqbm1nc2JncnR3emhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY2OTY4MTMsImV4cCI6MjA1MjI3MjgxM30.R6Y-P3L2LAwf9UtmolyRI2tUfwO0zpQvlT6HARO8r6Y"
         )
         {
-            install(Storage)
+            install(io.github.jan.supabase.storage.Storage)
             install(Postgrest)
         }
         
@@ -55,6 +56,10 @@ class StorageActivity : AppCompatActivity() {
                 val urls = imagelist.map { supabase1.storage.from("images").publicUrl(it.name)}
                 storageRecyclerView.layoutManager = GridLayoutManager(this@StorageActivity, 2)
                 storageRecyclerView.adapter = ImageAdapter(urls)
+                Toast.makeText(this@StorageActivity, "Adapter set with ${urls.size} images", Toast.LENGTH_SHORT).show()
+                //Log.d("AdapterCheck", "Adapter set with ${urls.size} images")
+                Toast.makeText(this@StorageActivity, "Fetched: ${imagelist.size}", Toast.LENGTH_SHORT).show()
+                //Log.d("ImageList", "Fetched: ${imagelist.size}")
             } catch (e: Exception){
                 Toast.makeText(this@StorageActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }

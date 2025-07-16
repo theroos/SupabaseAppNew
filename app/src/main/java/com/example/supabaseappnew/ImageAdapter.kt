@@ -1,9 +1,11 @@
 package com.example.supabaseappnew
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import io.ktor.http.Url
 import com.bumptech.glide.Glide
@@ -21,6 +23,8 @@ class ImageAdapter(private val urls: List<String>): RecyclerView.Adapter<ImageAd
     override fun getItemCount(): Int = urls.size
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        Toast.makeText(holder.imageView.context, "Binding image at $position: ${urls[position]}", Toast.LENGTH_SHORT).show()
+        //Log.d("ImageAdapter", "Binding image at $position: ${urls[position]}")
         Glide.with(holder.imageView.context).load(urls[position]).into(holder.imageView)
     }
 

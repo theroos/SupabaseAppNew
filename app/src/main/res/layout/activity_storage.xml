@@ -9,8 +9,6 @@
     android:orientation="vertical"
     tools:context=".StorageActivity">
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/media_recyclerview"
         android:layout_width="match_parent"
@@ -18,6 +16,7 @@
         android:clipToPadding="false"
         android:padding="30dp"
         android:scrollbars="vertical"
+        tools:listitem="@layout/item_image"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/upload_fab"
         app:layout_constraintEnd_toEndOf="parent"
