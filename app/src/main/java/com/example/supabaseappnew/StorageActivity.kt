@@ -45,35 +45,44 @@ class StorageActivity : AppCompatActivity() {
 
         fetchImages()
 
-
     }
+
 
     private fun fetchImages() {
         lifecycleScope.launch {
-            try {
-                val imagelist = supabase1.storage.from("images").list()
+            try{
+                val response = supabase1.storage.from("images").list("concept kits")
 
-                imagelist.forEach{
-                    Log.d("SupabaseFetch", "Total items: ${imagelist.size}")
-                    Toast.makeText(this@StorageActivity, "Total items: ${imagelist.size}", Toast.LENGTH_SHORT).show()
+                /*if(response.error != null){
+                    Toast.makeText(this@StorageActivity, "Error: ${response.error}", Toast.LENGTH_LONG).show()
+                    Log.e("StorageActivity", "Error: ${response.error}")
+                    return@launch
+                }*/
+
+                if (response.isNotEmpty()){
+                    val urls = response.map { file -> supabase1.storage.from("images").publicUrl("concept kits/${file.name}")
+                    }
+                    storageRecyclerView.layoutManager = GridLayoutManager(this@StorageActivity, 2)
+                    storageRecyclerView.adapter = ImageAdapter(urls)
+
+                    Toast.makeText(this@StorageActivity, "Fetched ${urls.size} images", Toast.LENGTH_LONG).show()
+                }else{
+                    Toast.makeText(this@StorageActivity, "No images found", Toast.LENGTH_LONG).show()
                 }
 
-                val urls = imagelist.map { supabase1.storage.from("images").publicUrl(it.name)}
-                storageRecyclerView.layoutManager = GridLayoutManager(this@StorageActivity, 2)
-                storageRecyclerView.adapter = ImageAdapter(urls)
-                Toast.makeText(
-                    this@StorageActivity,
-                    "Adapter set with ${urls.size} images",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Toast.makeText(
-                    this@StorageActivity,
-                    "Fetched: ${imagelist.size}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } catch (e: Exception) {
-                Toast.makeText(this@StorageActivity, "Error: ${e.message}", Toast.LENGTH_SHORT)
-                    .show()
+                /*val imagelist = response.data ?: emptyList()
+
+                Toast.makeText(this@StorageActivity, "Fetched ${imagelist.size} images", Toast.LENGTH_LONG).show()
+
+                val urls = imagelist.map { file -> supabase1.storage.from("images").publicUrl("concept kits/${file.name}).toString() }")}
+
+
+
+                Toast.makeText(this@StorageActivity, "Fetched ${urls.size} images", Toast.LENGTH_LONG).show()*/
+
+            } catch(e: Exception){
+                Toast.makeText(this@StorageActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                Log.e("StorageActivity", "Error: ${e.message}", e)
             }
         }
     }
