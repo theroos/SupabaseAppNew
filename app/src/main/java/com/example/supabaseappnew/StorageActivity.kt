@@ -63,7 +63,7 @@ class StorageActivity : AppCompatActivity() {
                     val urls = response.map { file -> supabase1.storage.from("images").publicUrl("concept kits/${file.name}")
                     }
                     storageRecyclerView.layoutManager = GridLayoutManager(this@StorageActivity, 2)
-                    storageRecyclerView.adapter = ImageAdapter(urls)
+                    storageRecyclerView.adapter = ImageAdapter(urls, supportFragmentManager)
 
                     Toast.makeText(this@StorageActivity, "Fetched ${urls.size} images", Toast.LENGTH_LONG).show()
                 }else{

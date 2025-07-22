@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.ktor.http.Url
 import com.bumptech.glide.Glide
 
-class ImageAdapter(private val urls: List<String>): RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
-    class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ImageAdapter(private val urls: List<String>,private val fragmentManager: FragmentManager): RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+
+
+    inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.image_thumbnail)
     }
 
@@ -20,7 +23,7 @@ class ImageAdapter(private val urls: List<String>): RecyclerView.Adapter<ImageAd
         return ImageViewHolder(view)
     }
 
-    override fun getItemCount(): Int = urls.size
+
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
         val url = urls[position]
@@ -30,8 +33,12 @@ class ImageAdapter(private val urls: List<String>): RecyclerView.Adapter<ImageAd
 
         holder.imageView.setOnClickListener {
             val fullImageFragment = FullImageFragment.newInstance(url)
+            //fragmentManager.beginTransaction().add(R.id.fullScreenImageView, fullImageFragment).addToBackStack(null).commit()
 
+            fullImageFragment.show(fragmentManager, "full_image")
         }
     }
+
+    override fun getItemCount(): Int = urls.size
 
 }
