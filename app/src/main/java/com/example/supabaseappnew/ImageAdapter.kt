@@ -32,10 +32,13 @@ class ImageAdapter(private val urls: List<String>,private val fragmentManager: F
         Glide.with(holder.imageView.context).load(urls[position]).into(holder.imageView)
 
         holder.imageView.setOnClickListener {
-            val fullImageFragment = FullImageFragment.newInstance(url)
+            val fullImageFragment = FullImageFragment.newInstance(urls.toString(), position)
             //fragmentManager.beginTransaction().add(R.id.fullScreenImageView, fullImageFragment).addToBackStack(null).commit()
 
             fullImageFragment.show(fragmentManager, "full_image")
+
+
+
         }
     }
 
