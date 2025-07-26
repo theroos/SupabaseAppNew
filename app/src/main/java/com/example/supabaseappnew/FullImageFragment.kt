@@ -20,10 +20,11 @@ class FullImageFragment : DialogFragment() {
         private const val ARG_IMAGE_URL = "image_url"
         private const val ARG_START_POSITION = "start_position"
 
-        fun newInstance(imageUrl: String, startPosition: Int): FullImageFragment{
+        fun newInstance(imageUrls: List<String>, startPosition: Int): FullImageFragment{
             val fragment = FullImageFragment()
             val args = Bundle()
-            args.putStringArrayList(ARG_IMAGE_URL, ArrayList<String>(listOf(imageUrl)))
+            //args.putStringArrayList(ARG_IMAGE_URL, ArrayList<String>(listOf(imageUrl)))
+            args.putStringArrayList(ARG_IMAGE_URL, ArrayList(imageUrls))
             args.putInt(ARG_START_POSITION, startPosition)
             fragment.arguments = args
             return fragment
