@@ -43,11 +43,13 @@ class FullImageFragment : DialogFragment() {
         //val imageView = view.findViewById<ImageView>(R.id.fullScreenImageView)
         //val imageUrl = arguments?.getString(ARG_IMAGE_URL)
         val imageUrls = arguments?.getStringArrayList(ARG_IMAGE_URL) ?: emptyList<String>()
+        //Log.d("FullImageFragment", "Total images received: ${imageUrls.size}")
+        Toast.makeText(this.context, "Total images received: ${imageUrls.size}", Toast.LENGTH_SHORT).show()
         val startPosition = arguments?.getInt(ARG_START_POSITION) ?: 0
         val viewPager = view.findViewById<ViewPager2>(R.id.viewPager2)
         //val viewPager = view.findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.viewPager2)
         //Log.d("FullImageFragment", "Number of Image URLs: ${imageUrls.size}")
-        Toast.makeText(this.context, "Number of Image URLs: ${imageUrls.size}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this.context, "Number of Image URLs: ${imageUrls.size}", Toast.LENGTH_SHORT).show()
         viewPager.adapter = FullImagePagerAdapter(imageUrls)
         viewPager.setCurrentItem(startPosition, false)
 

@@ -33,7 +33,7 @@ class ImageAdapter(private val urls: List<String>,private val fragmentManager: F
 
         holder.imageView.setOnClickListener {
             val clickedImageUrl: String = urls[position]
-            val fullImageFragment = FullImageFragment.newInstance(listOf(clickedImageUrl), position)
+            val fullImageFragment = FullImageFragment.newInstance(urls, position)
             //fragmentManager.beginTransaction().add(R.id.fullScreenImageView, fullImageFragment).addToBackStack(null).commit()
 
             fullImageFragment.show(fragmentManager, "full_image")
