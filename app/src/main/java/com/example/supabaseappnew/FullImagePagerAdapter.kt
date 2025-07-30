@@ -14,6 +14,7 @@ class FullImagePagerAdapter(private val imageUrls: List<String>): RecyclerView.A
     inner class PagerViewHolder(view : View):RecyclerView.ViewHolder(view)
     {
         val fullimageview: ImageView = view.findViewById(R.id.fullScreenImageView)
+        val deleteimagebtn: ImageView = view.findViewById(R.id.delete_imagebtn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FullImagePagerAdapter.PagerViewHolder
@@ -30,6 +31,10 @@ class FullImagePagerAdapter(private val imageUrls: List<String>): RecyclerView.A
         Glide.with(holder.fullimageview.context)
             .load(imageUrls[position])
             .into(holder.fullimageview)
+
+        holder.deleteimagebtn.setOnClickListener {
+
+        }
     }
 
     override fun getItemCount(): Int {
