@@ -1,19 +1,15 @@
 package com.example.supabaseappnew
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 
 
-class FullImageFragment : DialogFragment() {
+class FullImageFragment( private val onImageDeleted: (() -> Unit)? = null) : DialogFragment() {
 
 
     companion object {
@@ -35,6 +31,7 @@ class FullImageFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_image_viewpager, container, false)
     }
@@ -50,7 +47,7 @@ class FullImageFragment : DialogFragment() {
         //val viewPager = view.findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.viewPager2)
         //Log.d("FullImageFragment", "Number of Image URLs: ${imageUrls.size}")
         //Toast.makeText(this.context, "Number of Image URLs: ${imageUrls.size}", Toast.LENGTH_SHORT).show()
-        viewPager.adapter = FullImagePagerAdapter(imageUrls)
+        viewPager.adapter = FullImagePagerAdapter(imageUrls,this,onImageDeleted)
         viewPager.setCurrentItem(startPosition, false)
 
         //Glide.with(this).load(imageUrl).into(imageView)
