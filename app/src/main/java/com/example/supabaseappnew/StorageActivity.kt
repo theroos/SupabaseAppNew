@@ -66,8 +66,11 @@ class StorageActivity : AppCompatActivity() {
                     storageRecyclerView.adapter = ImageAdapter(urls, supportFragmentManager)
 
                     Toast.makeText(this@StorageActivity, "Fetched ${urls.size} images", Toast.LENGTH_LONG).show()
+
                 }else{
+
                     Toast.makeText(this@StorageActivity, "No images found", Toast.LENGTH_LONG).show()
+
                 }
 
                 /*val imagelist = response.data ?: emptyList()

@@ -9,7 +9,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.viewpager2.widget.ViewPager2
 
 
-class FullImageFragment( private val onImageDeleted: (() -> Unit)? = null) : DialogFragment() {
+class FullImageFragment : DialogFragment() {
+
+    var onImageDeleted: (() -> Unit)? = null
 
 
     companion object {
@@ -48,6 +50,8 @@ class FullImageFragment( private val onImageDeleted: (() -> Unit)? = null) : Dia
         //Log.d("FullImageFragment", "Number of Image URLs: ${imageUrls.size}")
         //Toast.makeText(this.context, "Number of Image URLs: ${imageUrls.size}", Toast.LENGTH_SHORT).show()
         viewPager.adapter = FullImagePagerAdapter(imageUrls,this,onImageDeleted)
+        
+
         viewPager.setCurrentItem(startPosition, false)
 
         //Glide.with(this).load(imageUrl).into(imageView)

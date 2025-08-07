@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import io.ktor.http.Url
@@ -33,12 +34,16 @@ class ImageAdapter(private val urls: List<String>,private val fragmentManager: F
 
         holder.imageView.setOnClickListener {
             val clickedImageUrl: String = urls[position]
-            val fullImageFragment = FullImageFragment.newInstance(urls, position)
+            //val fullImageFragment = FullImageFragment.newInstance(urls, position)
             //fragmentManager.beginTransaction().add(R.id.fullScreenImageView, fullImageFragment).addToBackStack(null).commit()
+            val fullImageFragment = FullImageFragment.newInstance(urls, position).apply {
+                onImageDeleted = {
+                    onImageDeleted?.invoke()
+                    (parentFragment as? DialogFragment)?.dismiss() // ✅ Then close the dialog
+                } // 🔁 calls fetchImages() in activity
+            }
 
             fullImageFragment.show(fragmentManager, "full_image")
-
-
 
         }
     }
