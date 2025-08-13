@@ -13,6 +13,7 @@ import io.github.jan.supabase.createSupabaseClient
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -25,6 +26,7 @@ class StorageActivity : AppCompatActivity() {
 
     private lateinit var supabase1: SupabaseClient
     private lateinit var storageRecyclerView: RecyclerView
+    private lateinit var swiperefresh : SwipeRefreshLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +35,7 @@ class StorageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_storage)
 
         storageRecyclerView = findViewById(R.id.media_recyclerview)
+        swiperefresh = findViewById(R.id.swiperefresh)
 
         supabase1 = createSupabaseClient(
             supabaseUrl = "https://aaukmjyjnmgsbgrtwzho.supabase.co",
@@ -45,10 +48,18 @@ class StorageActivity : AppCompatActivity() {
 
         fetchImages()
 
+        swiperefresh.setOnRefreshListener {
+            fetchImages()
+            swiperefresh.isRefreshing = false
+        }
+
     }
 
 
     private fun fetchImages() {
+
+        swiperefresh.isRefreshing = true
+
         lifecycleScope.launch {
             try{
                 val response = supabase1.storage.from("images").list("concept kits")

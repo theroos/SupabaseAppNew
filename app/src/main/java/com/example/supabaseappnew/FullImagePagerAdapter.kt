@@ -58,9 +58,7 @@ class FullImagePagerAdapter(
                     withContext(Dispatchers.Main){
                         if(success){
                             Toast.makeText(holder.itemView.context, "Image deleted successfully", Toast.LENGTH_SHORT).show()
-                            onImageDeleted?.invoke()
                             (parentFragment as? DialogFragment)?.dismiss()
-
                         } else{
                             Toast.makeText(holder.itemView.context, "Failed to delete image", Toast.LENGTH_SHORT).show()
                         }
