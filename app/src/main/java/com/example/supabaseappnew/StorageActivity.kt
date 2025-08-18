@@ -1,11 +1,13 @@
 package com.example.supabaseappnew
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,11 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
+import io.github.jan.supabase.storage.upload
 import kotlinx.coroutines.launch
 
 class StorageActivity : AppCompatActivity() {
@@ -27,6 +31,17 @@ class StorageActivity : AppCompatActivity() {
     private lateinit var supabase1: SupabaseClient
     private lateinit var storageRecyclerView: RecyclerView
     private lateinit var swiperefresh : SwipeRefreshLayout
+    private lateinit var uploadfab : FloatingActionButton
+
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            uploadImageToSupabase(it)  // call upload function
+        }
+    }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +51,7 @@ class StorageActivity : AppCompatActivity() {
 
         storageRecyclerView = findViewById(R.id.media_recyclerview)
         swiperefresh = findViewById(R.id.swiperefresh)
+        uploadfab = findViewById<FloatingActionButton>(R.id.upload_fab)
 
         supabase1 = createSupabaseClient(
             supabaseUrl = "https://aaukmjyjnmgsbgrtwzho.supabase.co",
@@ -44,6 +60,10 @@ class StorageActivity : AppCompatActivity() {
         {
             install(Storage)
             install(Postgrest)
+        }
+
+        uploadfab.setOnClickListener(){
+            pickImageLauncher.launch("image/*")
         }
 
         fetchImages()
@@ -58,7 +78,7 @@ class StorageActivity : AppCompatActivity() {
 
     private fun fetchImages() {
 
-        swiperefresh.isRefreshing = true
+        //swiperefresh.isRefreshing = true
 
         lifecycleScope.launch {
             try{
@@ -97,6 +117,24 @@ class StorageActivity : AppCompatActivity() {
             } catch(e: Exception){
                 Toast.makeText(this@StorageActivity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 Log.e("StorageActivity", "Error: ${e.message}", e)
+            }
+        }
+    }
+
+    private fun uploadImageToSupabase(it: Uri) {
+        lifecycleScope.launch {
+            try {
+                val inputStream = contentResolver.openInputStream(it) ?: return@launch
+                val bytes = inputStream.readBytes()
+                val fileName = "concept kits/${System.currentTimeMillis()}.jpg"
+
+                supabase1.storage.from("images").upload(fileName, bytes)
+
+                Toast.makeText(this@StorageActivity, "Image uploaded successfully", Toast.LENGTH_LONG).show()
+            }
+            catch (e:Exception){
+                Toast.makeText(this@StorageActivity,"Image Upload Failed",Toast.LENGTH_LONG).show()
+                e.printStackTrace()
             }
         }
     }
