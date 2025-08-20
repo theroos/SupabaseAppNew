@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -32,6 +33,7 @@ class StorageActivity : AppCompatActivity() {
     private lateinit var storageRecyclerView: RecyclerView
     private lateinit var swiperefresh : SwipeRefreshLayout
     private lateinit var uploadfab : FloatingActionButton
+    private lateinit var uploadprog : ProgressBar
 
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -52,6 +54,7 @@ class StorageActivity : AppCompatActivity() {
         storageRecyclerView = findViewById(R.id.media_recyclerview)
         swiperefresh = findViewById(R.id.swiperefresh)
         uploadfab = findViewById<FloatingActionButton>(R.id.upload_fab)
+        uploadprog = findViewById(R.id.upload_progbar)
 
         supabase1 = createSupabaseClient(
             supabaseUrl = "https://aaukmjyjnmgsbgrtwzho.supabase.co",
@@ -122,7 +125,10 @@ class StorageActivity : AppCompatActivity() {
     }
 
     private fun uploadImageToSupabase(it: Uri) {
+
         lifecycleScope.launch {
+            uploadprog.visibility = ProgressBar.VISIBLE
+            uploadfab.isEnabled = false
             try {
                 val inputStream = contentResolver.openInputStream(it) ?: return@launch
                 val bytes = inputStream.readBytes()
@@ -131,10 +137,16 @@ class StorageActivity : AppCompatActivity() {
                 supabase1.storage.from("images").upload(fileName, bytes)
 
                 Toast.makeText(this@StorageActivity, "Image uploaded successfully", Toast.LENGTH_LONG).show()
+                fetchImages()
             }
             catch (e:Exception){
-                Toast.makeText(this@StorageActivity,"Image Upload Failed",Toast.LENGTH_LONG).show()
+                //Toast.makeText(this@StorageActivity,"Image Upload Failed",Toast.LENGTH_LONG).show()
+                Toast.makeText(this@StorageActivity, "Upload failed: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
                 e.printStackTrace()
+            }
+            finally {
+                uploadprog.visibility = ProgressBar.INVISIBLE
+                uploadfab.isEnabled = true
             }
         }
     }
